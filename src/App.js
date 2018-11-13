@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import {Header} from "./shared/Header";
-import logo from './logo.svg';
+import {RentalList} from "./components/rental/RentalList";
 import './App.css';
 
 class App extends Component {
@@ -9,7 +9,9 @@ class App extends Component {
     return (
       <div className="App">
         <Header/>
-        I'm app component
+          <div className='container'>
+              <RentalList/>
+          </div>
       </div>
     );
   }
