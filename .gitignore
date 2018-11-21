@@ -25,3 +25,5 @@ yarn-error.log*
 
 /src/**/*.css
 package-lock.json
+/server/config/dev.js
+/server/config/prod.js
