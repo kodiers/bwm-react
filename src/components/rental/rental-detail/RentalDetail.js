@@ -2,7 +2,9 @@ import React from 'react';
 
 import {connect} from 'react-redux';
 
+import {RentalDetailInfo} from "./RentalDetailInfo";
 import * as actions from '../../../actions';
+import {RentalMap} from "./RentalMap";
 
 class RentalDetail extends React.Component {
 
@@ -13,11 +15,29 @@ class RentalDetail extends React.Component {
 
     render() {
         const rental = this.props.rental;
-        if (rental.id) {
+        if (rental._id) {
             return (
-                <div>
-                    <h1>{rental.title}</h1>
-                </div>
+                <section id='rentalDetails'>
+                    <div className='upper-section'>
+                        <div className='row'>
+                            <div className='col-md-6'>
+                                <img src={rental.image} alt=''></img>
+                            </div>
+                            <div className='col-md-6'>
+                                <RentalMap location={`${rental.city}, ${rental.street}`}/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className='details-section'>
+                        <div className='row'>
+                            <div className='col-md-8'>
+                                <RentalDetailInfo rental={rental}/>
+                            </div>
+                            <div className='col-md-4'> BOOKING</div>
+                        </div>
+                    </div>
+                </section>
             );
         }
         return (
