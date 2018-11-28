@@ -1,23 +1,21 @@
 import React from 'react';
-import {
-    withScriptjs,
-    withGoogleMap,
-    GoogleMap,
-    Circle
-} from "react-google-maps";
+import {withScriptjs, withGoogleMap, GoogleMap, Circle, InfoWindow} from "react-google-maps";
+import {Cacher} from "../../services/cacher";
 
 function MapComponent(props) {
-    const {coordinates} = props;
+    const {coordinates, isError, isLocationLoaded} = props;
     return (
         <GoogleMap
             defaultZoom={13}
             defaultCenter={coordinates}
             center={coordinates}
-        >
-            <Circle
-                center={coordinates}
-                radius={500}
-            />
+            options={{disableDefaultUI: isError ? true : false}}>
+            {isLocationLoaded && !isError && <Circle center={coordinates} radius={500}/>}
+            {isLocationLoaded && isError && <InfoWindow position={coordinates} options={{maxWidth: 300}}>
+                <div>
+                    Something going wrong!
+                </div>
+            </InfoWindow>}
         </GoogleMap>
     );
 }
@@ -30,12 +28,15 @@ function withGeocode(WrappedComponent) {
                 coordinates: {
                     lat: 0,
                     lng: 0
-                }
+                },
+                isError: false,
+                isLocationLoaded: false
             };
+            this.cacher = new Cacher();
         }
 
         componentWillMount() {
-            this.geocodeLocation();
+            this.getGeocodedLocation();
         }
 
         render() {
@@ -44,18 +45,47 @@ function withGeocode(WrappedComponent) {
             );
         }
 
-        geocodeLocation() {
-            const location = this.props.location;
-            const geocoder = new window.google.maps.Geocoder();
-            geocoder.geocode({address: location}, (result, status) => {
-                if (status === 'OK') {
-                    const geometry = result[0].geometry.location;
-                    const coordinates = {lat: geometry.lat(), lng: geometry.lng()};
-                    this.setState({
-                        coordinates: coordinates
-                    });
-                }
+        updateCoordinates(coordinates) {
+            this.setState({
+                coordinates: coordinates,
+                isLocationLoaded: true
             });
+        }
+
+        geocodeLocation(location) {
+            const geocoder = new window.google.maps.Geocoder();
+            return new Promise((resolve, reject) => {
+                geocoder.geocode({address: location}, (result, status) => {
+                    if (status === 'OK') {
+                        const geometry = result[0].geometry.location;
+                        const coordinates = {lat: geometry.lat(), lng: geometry.lng()};
+                        this.cacher.cacheValue(location, coordinates);
+
+                        resolve(coordinates);
+                    } else {
+                        reject('ERROR');
+                    }
+                });
+            })
+        }
+
+        getGeocodedLocation() {
+            const location = this.props.location;
+            if (this.cacher.isValueCached(location)) {
+                this.updateCoordinates(this.cacher.getCacheValue(location));
+            } else {
+                this.geocodeLocation(location).then(
+                    (coordinates) => {
+                        this.updateCoordinates(coordinates);
+                    },
+                    (error) => {
+                        this.setState({
+                            isError: true,
+                            isLocationLoaded: true
+                        });
+                    });
+            }
+
         }
     }
 }
