@@ -1,18 +1,11 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
+import {BwmInput} from "../shared/form/BwmInput";
+import {BwmResError} from "../shared/form/BwmResError";
 
-const renderField = ({input, label, type, meta: { touched, error, warning }, className}) => (
-    <div className='form-group'>
-        <label>{label}</label>
-        <div className='input-group'>
-            <input {...input} type={type} className={className} />
-        </div>
-        {touched && ((error && <div className='alert alert-danger'>{error}</div>))}
-    </div>
-);
 
 const RegisterForm = props => {
-    const { handleSubmit, pristine, reset, submitting, submitCb } = props;
+    const { handleSubmit, pristine, submitting, submitCb, valid, errors } = props;
 
     return (
         <form onSubmit={handleSubmit(submitCb)}>
@@ -21,29 +14,30 @@ const RegisterForm = props => {
                 type="text"
                 className='form-control'
                 label='Username'
-                component={renderField}
+                component={BwmInput}
             />
             <Field
                 name="email"
-                component={renderField}
+                component={BwmInput}
                 type="email"
                 label='email'
                 className='form-control'/>
             <Field
                 name="password"
-                component={renderField}
+                component={BwmInput}
                 type="password"
                 label='password'
                 className='form-control'/>
             <Field
                 name="passwordConfirmation"
-                component={renderField}
+                component={BwmInput}
                 type="password"
                 label='Password confirmation'
                 className='form-control'/>
-            <button type="submit" className='btn btn-bwm btn-form' disabled={pristine || submitting}>
+            <button type="submit" className='btn btn-bwm btn-form' disabled={!valid || pristine || submitting}>
                 Submit
             </button>
+            <BwmResError errors={errors}/>
         </form>
     )
 };
