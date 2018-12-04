@@ -4,12 +4,15 @@ import {reducer as formReducer} from "redux-form";
 
 
 import {rentalReducer, selectedRentalReducer} from "./rental-reducer";
+import {authReducer} from "./auth-reducer";
+
 
 export const init = () => {
     const reducer = combineReducers({
         rentals: rentalReducer,
         rental: selectedRentalReducer,
-        form: formReducer
+        form: formReducer,
+        auth: authReducer
     });
     const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
     const store = createStore(reducer,

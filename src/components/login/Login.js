@@ -1,12 +1,19 @@
 import React from 'react';
+import {connect} from 'react-redux';
 
 import LoginForm from './LoginForm';
+import * as actions from '../../actions';
 
 
 export class Login extends React.Component {
 
-    loginUser(userData) {
+    constructor() {
+        super();
+        this.loginUser = this.loginUser.bind(this);
+    }
 
+    loginUser(userData) {
+        this.props.dispatch(actions.login(userData));
     }
 
     render() {
@@ -30,3 +37,11 @@ export class Login extends React.Component {
         )
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        auth: state.auth
+    };
+}
+
+export default connect(mapStateToProps)(Login);
