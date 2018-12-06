@@ -35,7 +35,7 @@ const RegisterForm = props => {
                 label='Password confirmation'
                 className='form-control'/>
             <button type="submit" className='btn btn-bwm btn-form' disabled={!valid || pristine || submitting}>
-                Submit
+                Register
             </button>
             <BwmResError errors={errors}/>
         </form>

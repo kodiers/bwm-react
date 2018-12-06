@@ -3,8 +3,10 @@ import * as moment from 'moment';
 
 
 class AuthService {
+    tokenKey = 'auth_token';
+
     getToken() {
-        return localStorage.getItem('auth_token');
+        return localStorage.getItem(this.tokenKey);
     }
 
     decode(token) {
@@ -26,6 +28,10 @@ class AuthService {
             return true;
         }
         return false;
+    }
+
+    invalidateUser() {
+        localStorage.removeItem(this.tokenKey);
     }
 }
 

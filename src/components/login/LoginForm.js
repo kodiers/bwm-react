@@ -6,7 +6,7 @@ import {BwmResError} from "../shared/form/BwmResError";
 import {required, minLenght4} from "../shared/form/validators";
 
 const LoginForm = props => {
-    const { handleSubmit, pristine, submitting, submitCb, valid } = props;
+    const { handleSubmit, pristine, submitting, submitCb, valid, errors } = props;
 
     return (
         <form onSubmit={handleSubmit(submitCb)}>
@@ -25,8 +25,9 @@ const LoginForm = props => {
                 validate={[required]}
                 className='form-control'/>
             <button type="submit" className='btn btn-bwm btn-form' disabled={!valid || pristine || submitting}>
-                Submit
+                Login
             </button>
+            <BwmResError errors={errors}/>
         </form>
     )
 };
