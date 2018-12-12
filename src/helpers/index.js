@@ -10,7 +10,7 @@ export const toUpperCase = (value) => {
     return value ? titleize(value) : '';
 };
 
-export const getRangeOfDates = (startAt, endAt, dateFormat) => {
+export const getRangeOfDates = (startAt, endAt, dateFormat='Y/MM/DD') => {
     const tempDates = [];
     const mEndAt = moment(endAt);
     let mStartAt = moment(startAt);
