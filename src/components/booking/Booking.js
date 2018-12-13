@@ -1,10 +1,12 @@
 import React from 'react';
 
 import DateRangePicker from 'react-bootstrap-daterangepicker';
+import { ToastContainer, toast } from 'react-toastify';
 import * as moment from 'moment';
 
 import {getRangeOfDates} from "../../helpers";
 import {BookingModal} from "./BookingModal";
+import * as actions from '../../actions';
 
 
 export class Booking extends React.Component {
@@ -16,17 +18,18 @@ export class Booking extends React.Component {
             proposedBooking: {
                 startAt: '',
                 endAt: '',
-                guests: 0,
-                rental: {}
+                guests: ''
             },
             modal: {
                 open: false
-            }
+            },
+            errors: []
         };
         this.dateRef = React.createRef();
         this.checkInvalidDates = this.checkInvalidDates.bind(this);
         this.handleApply = this.handleApply.bind(this);
         this.cancelConfirmation = this.cancelConfirmation.bind(this);
+        this.reserveRental = this.reserveRental.bind(this);
     }
 
     componentWillMount() {
@@ -64,7 +67,7 @@ export class Booking extends React.Component {
         this.setState({
             proposedBooking: {
                 ...this.state.proposedBooking,
-                guests: parseInt(event.target.value)
+                guests: parseInt(event.target.value, 10)
             }
         });
     }
@@ -89,6 +92,29 @@ export class Booking extends React.Component {
         this.setState({modal: {open: false}});
     }
 
+    addNewBookedOutDates(booking) {
+        const dateRange = getRangeOfDates(booking.startAt, booking.endAt);
+        this.bookedOutDates.push(...dateRange);
+    }
+
+    resetData() {
+        this.dateRef.current.value = '';
+        this.setState({proposedBooking: {guests: ''}});
+    }
+
+    reserveRental() {
+        actions.createBooking(this.state.proposedBooking).then(
+            (booking) => {
+                this.addNewBookedOutDates(booking);
+                this.cancelConfirmation();
+                this.resetData();
+                toast.success('Booking has been successfully created!');
+            },
+            (errors) => {
+                this.setState({errors});
+            });
+    }
+
     render() {
 
         const {rental} = this.props;
@@ -96,6 +122,7 @@ export class Booking extends React.Component {
 
         return (
             <div className='booking'>
+                <ToastContainer/>
                 <h3 className='booking-price'>$ {rental.dailyRate} <span className='booking-per-night'>per night</span></h3>
                 <hr></hr>
                 <div className='form-group'>
@@ -116,6 +143,7 @@ export class Booking extends React.Component {
                         id='guests'
                         aria-describedby='guests'
                         placeholder=''
+                        value={guests}
                         onChange={(event) => {this.selectGuests(event)}} />
                 </div>
                 <button
@@ -129,8 +157,11 @@ export class Booking extends React.Component {
                 </p>
                 <BookingModal
                     closeModal={this.cancelConfirmation}
+                    confirmModal={this.reserveRental}
                     open={this.state.modal.open}
-                    booking={this.state.proposedBooking}/>
+                    booking={this.state.proposedBooking}
+                    errors={this.state.errors}
+                    rentalPrice={rental.dailyRate}/>
             </div>
         )
     }
