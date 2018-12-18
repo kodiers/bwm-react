@@ -33,6 +33,10 @@ class AuthService {
     invalidateUser() {
         localStorage.removeItem(this.tokenKey);
     }
+
+    getUsername() {
+        return this.decode(this.getToken()).username;
+    }
 }
 
 export default new AuthService();

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {BrowserRouter, Route, Redirect} from 'react-router-dom';
+import {BrowserRouter, Route, Redirect, Switch} from 'react-router-dom';
 
 import {Provider} from 'react-redux';
 
@@ -13,6 +13,7 @@ import Login from "./components/login/Login";
 import {Register} from "./components/register/Register";
 import {ProtectedRoute} from "./components/shared/auth/ProtectedRoute";
 import {LoggedInRoute} from "./components/shared/auth/LoggedInRoute";
+import {RentalCreate} from "./components/rental/rental-create/RentalCreate";
 import * as actions from './actions';
 
 const store = init();
@@ -38,12 +39,15 @@ class App extends Component {
                       <div className='App'>
                           <Header logout={this.logout}/>
                           <div className='container'>
-                              <Route exact path='/' render={() =>  <Redirect to='rentals'/>}/>
-                              <Route exact path='/rentals' component={RentalListing}/>
-                              <Route exact path='/rentals/:city/homes' component={RentalSearchListing}/>
-                              <ProtectedRoute exact path='/rentals/:id' component={RentalDetail}/>
-                              <Route exact path='/login' component={Login}/>
-                              <LoggedInRoute exact path='/register' component={Register}/>
+                              <Switch>
+                                  <Route exact path='/' render={() =>  <Redirect to='rentals'/>}/>
+                                  <Route exact path='/rentals' component={RentalListing}/>
+                                  <Route exact path='/rentals/:city/homes' component={RentalSearchListing}/>
+                                  <ProtectedRoute exact path='/rentals/new' component={RentalCreate}/>
+                                  <ProtectedRoute exact path='/rentals/:id' component={RentalDetail}/>
+                                  <Route exact path='/login' component={Login}/>
+                                  <LoggedInRoute exact path='/register' component={Register}/>
+                              </Switch>
                           </div>
                       </div>
                   </BrowserRouter>
