@@ -21,3 +21,5 @@ export const getRangeOfDates = (startAt, endAt, dateFormat='Y/MM/DD') => {
     tempDates.push(mEndAt.format(dateFormat));
     return tempDates;
 };
+
+export const pretifyDate = date => moment(date).format('MMM Do YY');
