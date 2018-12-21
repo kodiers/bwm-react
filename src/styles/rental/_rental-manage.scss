@@ -1,5 +1,9 @@
 #userRentals {
 
+  .toBeDeleted {
+    border-color: red;
+  }
+
   .card {
     margin-bottom: 20px;
   }
@@ -36,6 +40,15 @@
 
   .btn-bwm {
     margin-right: 10px;
+  }
+
+  .btn-danger, .btn-success {
+    margin-left: 10px;
+    font-size: 14px;
+  }
+
+  .deleteMenu {
+    margin-top: 5px;
   }
 }
 

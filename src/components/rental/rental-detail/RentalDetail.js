@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import {RentalDetailInfo} from "./RentalDetailInfo";
 import * as actions from '../../../actions';
 import {RentalMap} from "./RentalMap";
-import {Booking} from "../../booking/Booking";
+import Booking from "../../booking/Booking";
 
 class RentalDetail extends React.Component {
 

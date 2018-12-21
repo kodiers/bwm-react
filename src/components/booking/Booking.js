@@ -1,4 +1,6 @@
 import React from 'react';
+import {connect} from 'react-redux';
+import {Link} from "react-router-dom";
 
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { ToastContainer, toast } from 'react-toastify';
@@ -9,7 +11,7 @@ import {BookingModal} from "./BookingModal";
 import * as actions from '../../actions';
 
 
-export class Booking extends React.Component {
+class Booking extends React.Component {
 
     constructor() {
         super();
@@ -117,7 +119,7 @@ export class Booking extends React.Component {
 
     render() {
 
-        const {rental} = this.props;
+        const {rental, auth: {isAuth}} = this.props;
         const {startAt, endAt, guests} = this.state.proposedBooking;
 
         return (
@@ -125,31 +127,37 @@ export class Booking extends React.Component {
                 <ToastContainer/>
                 <h3 className='booking-price'>$ {rental.dailyRate} <span className='booking-per-night'>per night</span></h3>
                 <hr></hr>
-                <div className='form-group'>
-                    <label htmlFor='dates'>Dates</label>
-                    <DateRangePicker
-                        opens='left'
-                        containerStyles={{display: 'block'}}
-                        isInvalidDate={this.checkInvalidDates}
-                        onApply={this.handleApply}>
-                        <input id='dates' type='text' className='form-control' ref={this.dateRef}/>
-                    </DateRangePicker>
-                </div>
-                <div className='form-group'>
-                    <label htmlFor='guests'>Guests</label>
-                    <input
-                        type='number'
-                        className='form-control'
-                        id='guests'
-                        aria-describedby='guests'
-                        placeholder=''
-                        value={guests}
-                        onChange={(event) => {this.selectGuests(event)}} />
-                </div>
-                <button
-                    className='btn btn-bwm btn-confirm btn-block'
-                    onClick={() => this.confirmProposedData()}
-                    disabled={!startAt || !endAt || !guests}>Reserve place now</button>
+                { !isAuth && <Link className='btn btn-bwm btn-confirm btn-block' to={{pathname: '/login'}}>Login to book a place</Link>}
+                { isAuth &&
+                    <React.Fragment>
+                        <div className='form-group'>
+                            <label htmlFor='dates'>Dates</label>
+                            <DateRangePicker
+                                opens='left'
+                                containerStyles={{display: 'block'}}
+                                isInvalidDate={this.checkInvalidDates}
+                                onApply={this.handleApply}>
+                                <input id='dates' type='text' className='form-control' ref={this.dateRef}/>
+                            </DateRangePicker>
+                        </div>
+                        < div className='form-group'>
+                        <label htmlFor='guests'>Guests</label>
+                        <input
+                            type='number'
+                            className='form-control'
+                            id='guests'
+                            aria-describedby='guests'
+                            placeholder=''
+                            value={guests}
+                            onChange={(event) => {
+                            this.selectGuests(event)}} />
+                        </div>
+                        <button
+                            className='btn btn-bwm btn-confirm btn-block'
+                            onClick={() => this.confirmProposedData()}
+                            disabled={!startAt || !endAt || !guests}>Reserve place now</button>
+                    </React.Fragment>
+                }
                 <hr></hr>
                 <p className='booking-note-title'>People are interested into this house</p>
                 <p className='booking-note-text'>
@@ -166,3 +174,11 @@ export class Booking extends React.Component {
         )
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        auth: state.auth
+    };
+}
+
+export default connect(mapStateToProps)(Booking)
