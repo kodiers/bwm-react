@@ -2,6 +2,10 @@
   "name": "bwm-react",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node":"v10.13.0",
+    "npm": "6.4.1"
+  },
   "proxy": "http://localhost:3001",
   "dependencies": {
     "axios": "^0.18.0",
@@ -38,7 +42,8 @@
     "build-css": "node-sass-chokidar ./src -o ./src",
     "watch-css": "npm run build-css && node-sass-chokidar ./src -o ./src --watch --recursive",
     "start-js": "react-scripts start",
-    "start": "npm-run-all -p watch-css start-js",
+    "start": "npm start --prefix server",
+    "start-dev": "npm-run-all -p watch-css start-js",
     "build-js": "react-scripts build",
     "build": "npm-run-all -p build-css build-js",
     "test": "react-scripts test",
