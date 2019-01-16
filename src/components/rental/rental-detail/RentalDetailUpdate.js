@@ -2,9 +2,22 @@ import React from 'react';
 
 import {toUpperCase, rentalType} from 'helpers';
 
+import * as actions from '../../../actions';
 import {RentalAssets} from "./RentalAssets";
+import {EditableInput} from "../../shared/editable/EditableInput";
+
 
 export class RentalDetailUpdate extends React.Component {
+
+    constructor() {
+        super();
+        this.updateRental = this.updateRental.bind(this);
+    }
+
+    updateRental(rentalData) {
+        const {rental: {_id}, dispatch} = this.props;
+        dispatch(actions.updateRental(_id, rentalData));
+    }
 
     render() {
         const rental = this.props.rental;
@@ -16,7 +29,11 @@ export class RentalDetailUpdate extends React.Component {
                     <img src='https://api.adorable.io/avatars/285/abott@adorable.png' alt='owner'/>
                     <span>{rental.user && rental.user.username}</span>
                 </div>
-                <h1 className='rental-title'>{rental.title}</h1>
+                <EditableInput
+                    entity={rental}
+                    entityField={'title'}
+                    className={'rental-title'}
+                    updateEntity={this.updateRental}/>
                 <h2 className='rental-city'>{toUpperCase(rental.city)}</h2>
                 <div className='rental-room-info'>
                     <span><i className='fa fa-building'></i>{rental.bedrooms} bedrooms</span>

@@ -281,6 +281,10 @@
   font-size: 14px;
   margin-bottom: 0px; }
 
+#editableComponent .btn-editable {
+  margin-left: 10px;
+  font-size: 12px; }
+
 .clickable:hover {
   cursor: pointer; }
 
