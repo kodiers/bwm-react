@@ -113,6 +113,8 @@
       display: block;
       font-size: 13px;
       font-weight: 300; }
+  #rentalDetails .details-section .rental-label {
+    margin-right: 10px; }
   #rentalDetails .details-section .rental-title {
     margin-bottom: 5px;
     font-size: 32px;
@@ -121,10 +123,16 @@
     font-size: 14px;
     font-weight: 300;
     margin-bottom: 20px; }
+  #rentalDetails .details-section .rental-street {
+    font-size: 14px;
+    font-weight: 300;
+    margin-bottom: 20px; }
   #rentalDetails .details-section .rental-room-info {
     margin-bottom: 20px;
     font-weight: 300;
     font-size: 16px; }
+    #rentalDetails .details-section .rental-room-info .rental-bedrooms {
+      margin-right: 0px; }
     #rentalDetails .details-section .rental-room-info span {
       margin-right: 10px; }
     #rentalDetails .details-section .rental-room-info i {
@@ -281,9 +289,9 @@
   font-size: 14px;
   margin-bottom: 0px; }
 
-#editableComponent .btn-editable {
+.editableComponent .btn-editable {
   margin-left: 10px;
-  font-size: 12px; }
+  font-size: 9px; }
 
 .clickable:hover {
   cursor: pointer; }

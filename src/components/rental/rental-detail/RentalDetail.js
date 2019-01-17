@@ -15,13 +15,13 @@ class RentalDetail extends React.Component {
         this.props.dispatch(actions.fetchRentalById(rentalId));
     }
 
-    renderRentalDetail(rental) {
+    renderRentalDetail(rental, errors) {
         const {isUpdate} = this.props.location.state || false;
-        return isUpdate ? <RentalDetailUpdate rental={rental} dispatch={this.props.dispatch}/> : <RentalDetailInfo rental={rental}/>
+        return isUpdate ? <RentalDetailUpdate rental={rental} errors={errors} dispatch={this.props.dispatch}/> : <RentalDetailInfo rental={rental}/>
     }
 
     render() {
-        const rental = this.props.rental;
+        const {rental, errors} = this.props;
         if (rental._id) {
             return (
                 <section id='rentalDetails'>
@@ -39,7 +39,7 @@ class RentalDetail extends React.Component {
                     <div className='details-section'>
                         <div className='row'>
                             <div className='col-md-8'>
-                                {this.renderRentalDetail(rental)}
+                                {this.renderRentalDetail(rental, errors)}
                             </div>
                             <div className='col-md-4'>
                                 <Booking rental={rental}/>
@@ -57,7 +57,8 @@ class RentalDetail extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        rental: state.rental.data
+        rental: state.rental.data,
+        errors: state.rental.errors
     };
 }
 

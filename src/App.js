@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {BrowserRouter, Route, Redirect, Switch} from 'react-router-dom';
 
 import {Provider} from 'react-redux';
+import {ToastContainer} from "react-toastify";
 
 import './App.css';
 
@@ -42,6 +43,7 @@ class App extends Component {
               <Provider store={store}>
                   <BrowserRouter>
                       <div className='App'>
+                          <ToastContainer/>
                           <Header logout={this.logout}/>
                           <div className='container'>
                               <Switch>

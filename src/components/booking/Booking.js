@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {Link} from "react-router-dom";
 
 import DateRangePicker from 'react-bootstrap-daterangepicker';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import * as moment from 'moment';
 
 import {getRangeOfDates} from "../../helpers";
@@ -124,7 +124,6 @@ class Booking extends React.Component {
 
         return (
             <div className='booking'>
-                <ToastContainer/>
                 <h3 className='booking-price'>$ {rental.dailyRate} <span className='booking-per-night'>per night</span></h3>
                 <hr></hr>
                 { !isAuth && <Link className='btn btn-bwm btn-confirm btn-block' to={{pathname: '/login'}}>Login to book a place</Link>}

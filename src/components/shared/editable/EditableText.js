@@ -2,16 +2,21 @@ import React from 'react';
 
 import {EditableComponent} from "./EditableComponent";
 
-export class EditableInput extends EditableComponent {
+export class EditableText extends EditableComponent {
 
     renderComponentView() {
         const {value, isActive} = this.state;
-        const {className} = this.props;
+        const {className, rows, cols} = this.props;
 
         if (isActive) {
             return (
                 <React.Fragment>
-                    <input value={value} onChange={(event) => this.handleChange(event)} className={className}/>
+                    <textarea
+                        value={value}
+                        onChange={(event) => this.handleChange(event)}
+                        className={className}
+                        rows={rows}
+                        cols={cols}></textarea>
                     <button type='button'
                             className='btn btn-success btn-editable'
                             onClick={() => this.update()}>Save</button>

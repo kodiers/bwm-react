@@ -15,7 +15,8 @@ import {
     FETCH_USER_BOOKINGS_INIT,
     FETCH_USER_BOOKINGS_FAIL,
     UPDATE_RENTAL_SUCCESS,
-    UPDATE_RENTAL_FAIL
+    UPDATE_RENTAL_FAIL,
+    RESET_RENTAL_ERRORS
 } from "./types";
 
 
@@ -86,6 +87,12 @@ export const createRental = (rentalData) => {
         (error) => {
             return Promise.reject(error.response.data.errors);
         });
+};
+
+export const resetRentalErrors = () => {
+    return {
+        type: RESET_RENTAL_ERRORS
+    }
 };
 
 const updateRentalSuccess = (updatedRental) => {
