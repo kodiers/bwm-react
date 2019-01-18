@@ -5,19 +5,36 @@ import {connect} from 'react-redux';
 import {RentalDetailInfo} from "./RentalDetailInfo";
 import {RentalDetailUpdate} from "./RentalDetailUpdate";
 import * as actions from '../../../actions';
-import {RentalMap} from "./RentalMap";
+import RentalMap from "./RentalMap";
 import Booking from "../../booking/Booking";
+import {UserGuard} from "../../shared/auth/UserGuard";
+
 
 class RentalDetail extends React.Component {
+
+    constructor() {
+        super();
+        this.verifyRentalOwner = this.verifyRentalOwner.bind(this);
+    }
 
     componentWillMount() {
         const rentalId = this.props.match.params.id;
         this.props.dispatch(actions.fetchRentalById(rentalId));
     }
 
+    verifyRentalOwner() {
+        return actions.verifyRentalOwner(this.props.rental._id);
+    }
+
     renderRentalDetail(rental, errors) {
         const {isUpdate} = this.props.location.state || false;
-        return isUpdate ? <RentalDetailUpdate rental={rental} errors={errors} dispatch={this.props.dispatch}/> : <RentalDetailInfo rental={rental}/>
+        return isUpdate ? <UserGuard
+                            component={RentalDetailUpdate}
+                            rental={rental}
+                            errors={errors}
+                            dispatch={this.props.dispatch}
+                            verifyUser={this.verifyRentalOwner}/>
+                        : <RentalDetailInfo rental={rental}/>
     }
 
     render() {

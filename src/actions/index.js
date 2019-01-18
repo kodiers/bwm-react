@@ -16,11 +16,31 @@ import {
     FETCH_USER_BOOKINGS_FAIL,
     UPDATE_RENTAL_SUCCESS,
     UPDATE_RENTAL_FAIL,
-    RESET_RENTAL_ERRORS
+    RESET_RENTAL_ERRORS,
+    RELOAD_MAP,
+    RELOAD_MAP_FINISH
 } from "./types";
 
 
 const axiosInstance= axiosService.getInstance();
+
+export const verifyRentalOwner = (rentalId) => {
+    return axiosInstance.get(`/rentals/${rentalId}/verify-user`);
+};
+
+// MAP ACTIONS -----------------------------
+
+export const reloadMap = () => {
+    return {
+        type: RELOAD_MAP
+    }
+};
+
+export const reloadMapFinish = () => {
+    return {
+        type: RELOAD_MAP_FINISH
+    }
+};
 
 // RENTALS ACTIONS -------------------------
 
@@ -114,6 +134,9 @@ export const updateRental = (id, rentalData) => dispatch => {
         .then(res => res.data)
         .then(updatedRental => {
             dispatch(updateRentalSuccess(updatedRental));
+            if (rentalData.city || rentalData.street) {
+                dispatch(reloadMap());
+            }
         })
         .catch(({response}) => dispatch(updateRentalFail(response.data.errors)));
 };

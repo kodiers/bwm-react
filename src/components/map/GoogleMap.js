@@ -22,6 +22,7 @@ function MapComponent(props) {
 
 function withGeocode(WrappedComponent) {
     return class extends React.Component {
+
         constructor() {
             super();
             this.state = {
@@ -39,6 +40,12 @@ function withGeocode(WrappedComponent) {
             this.getGeocodedLocation();
         }
 
+        componentDidUpdate(prevProps, prevState, snapshot) {
+            if (this.props.isReloading) {
+                this.getGeocodedLocation();
+            }
+        }
+
         render() {
             return (
                 <WrappedComponent {...this.state}/>
@@ -46,6 +53,7 @@ function withGeocode(WrappedComponent) {
         }
 
         updateCoordinates(coordinates) {
+            this.props.mapLoaded();
             this.setState({
                 coordinates: coordinates,
                 isLocationLoaded: true
@@ -79,6 +87,7 @@ function withGeocode(WrappedComponent) {
                         this.updateCoordinates(coordinates);
                     },
                     (error) => {
+                        this.props.mapLoaded();
                         this.setState({
                             isError: true,
                             isLocationLoaded: true
