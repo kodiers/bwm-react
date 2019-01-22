@@ -4,6 +4,16 @@ import {EditableComponent} from "./EditableComponent";
 
 export class EditableInput extends EditableComponent {
 
+    formatView(value) {
+        const {formatPipe} = this.props;
+        if (formatPipe && formatPipe.length > 0) {
+            let formattedValue = value;
+            formatPipe.forEach(pipe => { formattedValue = pipe(formattedValue)});
+            return formattedValue;
+        }
+        return value;
+    }
+
     renderComponentView() {
         const {value, isActive} = this.state;
         const {className} = this.props;
@@ -23,7 +33,7 @@ export class EditableInput extends EditableComponent {
         }
         return (
             <React.Fragment>
-                <span className={className}>{value}</span>
+                <span className={className}>{this.formatView(value)}</span>
                 <button type='button' className='btn btn-warning btn-editable' onClick={() => this.enableEdit()}>Edit</button>
             </React.Fragment>
         );

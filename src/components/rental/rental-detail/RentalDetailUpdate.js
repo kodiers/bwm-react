@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {toUpperCase, rentalType} from 'helpers';
+import {toUpperCase } from 'helpers';
 import { toast } from 'react-toastify';
 
 import * as actions from '../../../actions';
@@ -68,6 +68,7 @@ export class RentalDetailUpdate extends React.Component {
                     entityField={'city'}
                     className={'rental-city'}
                     errors={errors}
+                    formatPipe={[toUpperCase]}
                     resetRentalError={this.resetRentalError}
                     updateEntity={this.updateRental}/>
                 <EditableInput

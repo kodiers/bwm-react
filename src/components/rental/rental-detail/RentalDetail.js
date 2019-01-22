@@ -14,6 +14,10 @@ class RentalDetail extends React.Component {
 
     constructor() {
         super();
+        this.state = {
+            isAllowed: false,
+            isFetching: true
+        }
         this.verifyRentalOwner = this.verifyRentalOwner.bind(this);
     }
 
@@ -22,18 +26,35 @@ class RentalDetail extends React.Component {
         this.props.dispatch(actions.fetchRentalById(rentalId));
     }
 
+    componentDidMount() {
+        const {isUpdate} = this.props.location.state || false;
+        if (isUpdate) {
+            this.verifyRentalOwner();
+        }
+    }
+
     verifyRentalOwner() {
-        return actions.verifyRentalOwner(this.props.rental._id);
+        const rentalId = this.props.match.params.id;
+        this.setState({isFetching: true});
+        return actions.verifyRentalOwner(rentalId).then(
+            () => {
+                this.setState({isAllowed: true, isFetching: false});
+            },
+            () => {
+                this.setState({isAllowed: false, isFetching: false});
+            });
     }
 
     renderRentalDetail(rental, errors) {
         const {isUpdate} = this.props.location.state || false;
-        return isUpdate ? <UserGuard
-                            component={RentalDetailUpdate}
-                            rental={rental}
-                            errors={errors}
-                            dispatch={this.props.dispatch}
-                            verifyUser={this.verifyRentalOwner}/>
+        const {isFetching, isAllowed} = this.state;
+        return isUpdate ? <UserGuard isAllowed={isAllowed} isFetching={isFetching}>
+                            <RentalDetailUpdate
+                                rental={rental}
+                                errors={errors}
+                                dispatch={this.props.dispatch}
+                                verifyUser={this.verifyRentalOwner}/>
+                          </UserGuard>
                         : <RentalDetailInfo rental={rental}/>
     }
 
