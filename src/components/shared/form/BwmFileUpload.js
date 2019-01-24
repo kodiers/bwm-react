@@ -1,6 +1,7 @@
 import React from 'react';
 
 import ReactCrop, {makeAspectCrop} from 'react-image-crop';
+import { toast } from 'react-toastify';
 
 import * as actions from '../../../actions';
 
@@ -35,6 +36,17 @@ export class BwmFileUpload extends React.Component {
         });
     }
 
+    resetToDefaultState(status) {
+        this.setState({
+            selectedFile: undefined,
+            imageBase64: '',
+            initialImageBase64: '',
+            croppedImage: {},
+            pending: false,
+            status: status,
+        });
+    }
+
     onChange(event) {
         const selectedFile = event.target.files[0];
         if (selectedFile) {
@@ -49,7 +61,7 @@ export class BwmFileUpload extends React.Component {
 
     async onCropCompleted(crop, pixelCrop) {
         const {selectedFile, initialImageBase64} = this.state;
-        if (selectedFile) {
+        if (selectedFile && (pixelCrop.height > 0 && pixelCrop.width > 0)) {
             const img = new Image();
             img.src = initialImageBase64;
             const croppedImage = await getCroppedImg(img, pixelCrop, selectedFile.name);
@@ -59,6 +71,11 @@ export class BwmFileUpload extends React.Component {
     }
 
     onImageLoaded(image) {
+        if (image.naturalWidth < 950 && image.naturalHeight < 720) {
+            this.resetToDefaultState('INIT');
+            toast.error("Minimum width of image is 950 and height 720");
+            return;
+        }
         this.setState({
             crop: makeAspectCrop({
                 x: 0,
@@ -66,7 +83,7 @@ export class BwmFileUpload extends React.Component {
                 aspect: 4 / 3,
                 width: 50
             }, image.width / image.height)
-        })
+        });
     }
 
     onError(error) {
@@ -74,7 +91,8 @@ export class BwmFileUpload extends React.Component {
     }
 
     onSuccess(uploadedImage) {
-        const {input: {onChange}} = this.props;
+        const {onChange} = this.props.input || this.props;
+        this.resetToDefaultState('OK');
         this.setState({pending: false, status: 'OK'});
         onChange(uploadedImage);
     }
@@ -116,7 +134,6 @@ export class BwmFileUpload extends React.Component {
     }
 
     render() {
-        const {label, meta: {touched, error}} = this.props;
         const {selectedFile, imageBase64, crop, initialImageBase64} = this.state;
         return (
             <div className='img-upload-container'>
@@ -137,9 +154,6 @@ export class BwmFileUpload extends React.Component {
                                     onChange={(crop) => this.onCropChange(crop)}
                                     onComplete={(crop, pixelCrop) => this.onCropCompleted(crop, pixelCrop)}
                                     onImageLoaded={(image) => this.onImageLoaded(image)} />}
-                { touched &&
-                    ((error && <div className='alert alert-danger'>{error}</div>))
-                }
                 { imageBase64 &&
                     <div className='img-preview-container'>
                         <div className='img-preview' style={{'backgroundImage': 'url(' + imageBase64 + ')'}}></div>

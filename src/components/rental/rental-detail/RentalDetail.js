@@ -3,63 +3,20 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import {RentalDetailInfo} from "./RentalDetailInfo";
-import {RentalDetailUpdate} from "./RentalDetailUpdate";
 import * as actions from '../../../actions';
 import RentalMap from "./RentalMap";
 import Booking from "../../booking/Booking";
-import {UserGuard} from "../../shared/auth/UserGuard";
 
 
 class RentalDetail extends React.Component {
-
-    constructor() {
-        super();
-        this.state = {
-            isAllowed: false,
-            isFetching: true
-        }
-        this.verifyRentalOwner = this.verifyRentalOwner.bind(this);
-    }
 
     componentWillMount() {
         const rentalId = this.props.match.params.id;
         this.props.dispatch(actions.fetchRentalById(rentalId));
     }
 
-    componentDidMount() {
-        const {isUpdate} = this.props.location.state || false;
-        if (isUpdate) {
-            this.verifyRentalOwner();
-        }
-    }
-
-    verifyRentalOwner() {
-        const rentalId = this.props.match.params.id;
-        this.setState({isFetching: true});
-        return actions.verifyRentalOwner(rentalId).then(
-            () => {
-                this.setState({isAllowed: true, isFetching: false});
-            },
-            () => {
-                this.setState({isAllowed: false, isFetching: false});
-            });
-    }
-
-    renderRentalDetail(rental, errors) {
-        const {isUpdate} = this.props.location.state || false;
-        const {isFetching, isAllowed} = this.state;
-        return isUpdate ? <UserGuard isAllowed={isAllowed} isFetching={isFetching}>
-                            <RentalDetailUpdate
-                                rental={rental}
-                                errors={errors}
-                                dispatch={this.props.dispatch}
-                                verifyUser={this.verifyRentalOwner}/>
-                          </UserGuard>
-                        : <RentalDetailInfo rental={rental}/>
-    }
-
     render() {
-        const {rental, errors} = this.props;
+        const {rental} = this.props;
         if (rental._id) {
             return (
                 <section id='rentalDetails'>
@@ -77,7 +34,7 @@ class RentalDetail extends React.Component {
                     <div className='details-section'>
                         <div className='row'>
                             <div className='col-md-8'>
-                                {this.renderRentalDetail(rental, errors)}
+                                <RentalDetailInfo rental={rental}/>
                             </div>
                             <div className='col-md-4'>
                                 <Booking rental={rental}/>

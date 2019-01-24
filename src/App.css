@@ -293,6 +293,9 @@
   margin-left: 10px;
   font-size: 9px; }
 
+.editableComponent .btn-editable-img {
+  margin: 10px; }
+
 .img-upload-container {
   margin-bottom: 20px;
   position: relative; }
