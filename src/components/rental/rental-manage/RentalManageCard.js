@@ -44,7 +44,7 @@ export class RentalManageCard extends React.Component {
                             !wantDelete &&
                                 <React.Fragment>
                                     <button className='btn btn-danger' onClick={() => {this.showDeleteMenu()}}>Delete</button>
-                                    <Link className='btn btn-warning' to={{pathname: `/rentals/${rental._id}`, state: {isUpdate: true}}}>Edit</Link>
+                                    <Link className='btn btn-warning' to={{pathname: `/rentals/${rental._id}/edit`}}>Edit</Link>
                                 </React.Fragment>
                         }
                         {
