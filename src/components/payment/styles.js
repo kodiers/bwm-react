@@ -20,7 +20,7 @@ export const createOptions = () => {
 export const formStyles = () => {
     return {
         style: {
-            height: '100px',
+            height: '100%',
             backgroundColor: '#fbfbfb',
             padding: '5px',
             marginTop: '15px'
@@ -31,7 +31,6 @@ export const formStyles = () => {
 export const buttonStyles = () => {
     return {
         style: {
-            marginTop: '15px'
         }
     }
 };

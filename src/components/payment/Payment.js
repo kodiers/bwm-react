@@ -8,9 +8,11 @@ import CheckoutForm from './CheckoutForm';
 class Payment extends React.Component {
     render() {
         return (
-            <Elements>
-                <CheckoutForm/>
-            </Elements>
+            <div className='payment'>
+                <Elements>
+                    <CheckoutForm {...this.props}/>
+                </Elements>
+            </div>
         )
     }
 }

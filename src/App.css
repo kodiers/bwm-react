@@ -343,6 +343,11 @@
   100% {
     transform: rotate(360deg); } }
 
+.payment .alert-payment {
+  font-size: 13px;
+  padding: 8px;
+  margin-top: 5px; }
+
 .clickable:hover {
   cursor: pointer; }
 
