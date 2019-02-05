@@ -9,6 +9,7 @@ import * as moment from 'moment';
 import {getRangeOfDates} from "../../helpers";
 import {BookingModal} from "./BookingModal";
 import * as actions from '../../actions';
+import Payment from '../payment/Payment';
 
 
 class Booking extends React.Component {
@@ -168,7 +169,8 @@ class Booking extends React.Component {
                     open={this.state.modal.open}
                     booking={this.state.proposedBooking}
                     errors={this.state.errors}
-                    rentalPrice={rental.dailyRate}/>
+                    rentalPrice={rental.dailyRate}
+                    acceptPayment={() => <Payment/>}/>
             </div>
         )
     }
