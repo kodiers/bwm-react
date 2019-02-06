@@ -264,3 +264,8 @@ export const uploadImage = (image) => {
             return Promise.reject(response.data.errors[0]);
         });
 };
+
+
+export const getPendingPayments = () => {
+    return axiosInstance.get('/payments').then(res => res.data).catch(({response}) => Promise.reject(response.data.errors));
+};
