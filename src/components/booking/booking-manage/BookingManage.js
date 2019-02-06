@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {Link} from "react-router-dom";
 
 import * as actions from '../../../actions';
-import {BookingCard} from "./BookingCard";
+import {BookingCard, PaymentCard} from "./BookingCard";
 
 
 export class BookingManage extends React.Component {
@@ -25,7 +25,7 @@ export class BookingManage extends React.Component {
     }
 
     renderPayments(payments) {
-        return payments.map((payment, index) => <BookingCard booking={payment.booking} payment={payment} key={index}/>);
+        return payments.map((payment, index) => <PaymentCard booking={payment.booking} payment={payment} key={index}/>);
     }
 
     render() {
