@@ -35,8 +35,7 @@ export function BookingCard(props) {
 }
 
 export function PaymentCard(props) {
-    const {booking, payment} = props;
-    console.log(booking, payment);
+    const {booking, payment, paymentBtns} = props;
     return (
         <div className='col-md-4'>
             <div className='card text-center'>
@@ -44,21 +43,25 @@ export function PaymentCard(props) {
                     Booking made by {payment.fromUser.username}
                 </div>
                 <div className='card-block'>
-                    { booking.rental &&
+                    { booking && booking.rental &&
                     <div>
                         <h4 className='card-title'> {booking.rental.title} - {toUpperCase(booking.rental.city)}</h4>
                         <p className='card-text booking-desc'>{booking.rental.description}</p>
                     </div>
                     }
-                    <p className='card-text booking-days'>{pretifyDate(booking.startAt)} - {pretifyDate(booking.endAt)} | {booking.days} days</p>
+                    {booking &&
+                        <p className='card-text booking-days'>{pretifyDate(booking.startAt)} - {pretifyDate(booking.endAt)} | {booking.days} days</p>
+                    }
                     <p className='card-text booking-price'><span>Price: </span> <span
                         className='booking-price-value'>{payment.amount / 100} $</span></p>
-                    { booking.rental &&
+                    <p className='card-text payment-status'>Status: {payment.status}</p>
+                    { booking && booking.rental &&
                     <Link className='btn btn-bwm' to={`/rentals/${booking.rental._id}`}>Go to Rental</Link>
                     }
                 </div>
                 <div className='card-footer text-muted'>
-                    Created {pretifyDate(booking.createdAt)}
+                    { booking && <div>Created {pretifyDate(booking.createdAt)}</div>}
+                    { payment.status === 'pending' && paymentBtns && paymentBtns(payment)}
                 </div>
             </div>
         </div>

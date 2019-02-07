@@ -20,12 +20,41 @@ export class BookingManage extends React.Component {
             .catch((err) => {});
     }
 
+    acceptPayment(payment) {
+        actions.acceptPayment(payment)
+            .then(status => {
+                this.getPendingPayments();
+            })
+            .catch((err) => {});
+    }
+
+    declinePayment(payment) {
+        actions.declinePayment(payment)
+            .then(status => {
+                this.getPendingPayments();
+            })
+            .catch((err) => {});
+    }
+
     renderBookings(bookings) {
         return bookings.map((booking, index) => <BookingCard booking={booking} key={index}/>);
     }
 
     renderPayments(payments) {
-        return payments.map((payment, index) => <PaymentCard booking={payment.booking} payment={payment} key={index}/>);
+        return payments.map((payment, index) => <PaymentCard
+                                                    booking={payment.booking}
+                                                    payment={payment}
+                                                    paymentBtns={this.renderPaymentButtons}
+                                                    key={index}/>);
+    }
+
+    renderPaymentButtons = (payment) => {
+        return (
+            <div>
+                <button className='btn btn-success' onClick={() => this.acceptPayment(payment)}>Accept</button>{' '}
+                <button className='btn btn-danger' onClick={() => this.declinePayment(payment)}>Decline</button>
+            </div>
+        )
     }
 
     render() {
