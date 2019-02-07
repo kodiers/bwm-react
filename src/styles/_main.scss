@@ -7,6 +7,7 @@
 @import "booking/booking.scss";
 @import "rental/rental-manage.scss";
 @import "editable/editable-component.scss";
+@import "payment/payment.scss";
 
 .clickable {
   &:hover {
@@ -30,6 +31,10 @@
 
 .condo {
   color: #d68000;
+}
+
+.btn {
+  background-color: $main-color;
 }
 
 .btn-bwm {
