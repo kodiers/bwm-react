@@ -10,6 +10,7 @@ const userRoutes = require('./routes/users');
 const bookingRoutes = require('./routes/bookings');
 const imageUploadRoutes = require('./routes/image-upload');
 const paymentRoutes = require('./routes/payments');
+const reviewRoutes = require('./routes/reviews');
 
 
 mongoose.connect(config.DB_URI, {
@@ -33,6 +34,7 @@ app.use('/api/v1/rentals', rentalRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/bookings', bookingRoutes);
 app.use('/api/v1/payments', paymentRoutes);
+app.use('/api/v1/reviews', reviewRoutes);
 app.use('/api/v1', imageUploadRoutes);
 
 if (process.env.NODE_ENV === 'production') {
