@@ -4,6 +4,7 @@ import {Link} from "react-router-dom";
 
 import * as actions from '../../../actions';
 import {BookingCard, PaymentCard} from "./BookingCard";
+import {ReviewModal} from "../../review/ReviewModal";
 
 
 export class BookingManage extends React.Component {
@@ -37,7 +38,9 @@ export class BookingManage extends React.Component {
     }
 
     renderBookings(bookings) {
-        return bookings.map((booking, index) => <BookingCard booking={booking} key={index}/>);
+        return bookings.map((booking, index) => <BookingCard booking={booking}
+                                                             review={() => <ReviewModal/>}
+                                                             key={index}/>);
     }
 
     renderPayments(payments) {

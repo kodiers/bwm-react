@@ -5,7 +5,7 @@ import {pretifyDate, toUpperCase} from "../../../helpers";
 
 
 export function BookingCard(props) {
-    const {booking} = props;
+    const {booking, review} = props;
     return (
         <div className='col-md-4'>
             <div className='card text-center'>
@@ -23,8 +23,9 @@ export function BookingCard(props) {
                     <p className='card-text booking-price'><span>Price: </span> <span
                         className='booking-price-value'>{booking.totalPrice} $</span></p>
                     { booking.rental &&
-                    <Link className='btn btn-bwm' to={`/rentals/${booking.rental._id}`}>Go to Rental</Link>
+                        <Link className='btn btn-bwm' to={`/rentals/${booking.rental._id}`}>Go to Rental</Link>
                     }
+                    {review && review()}
                 </div>
                 <div className='card-footer text-muted'>
                     Created {pretifyDate(booking.createdAt)}
