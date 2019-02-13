@@ -76,8 +76,9 @@ function isValidBooking(proposedBooking, rental) {
 
 async function createPayment(booking, toUser, token) {
   const {user} = booking;
+  const tokenId = token.id || token;
   const customer = await stripe.customers.create({
-    source: token.id,
+    source: tokenId,
     email: user.email
   });
 

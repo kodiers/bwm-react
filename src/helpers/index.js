@@ -23,3 +23,9 @@ export const getRangeOfDates = (startAt, endAt, dateFormat='Y/MM/DD') => {
 };
 
 export const pretifyDate = date => moment(date).format('MMM Do YY');
+
+export const isExpired = (date) => {
+    const dateNow = moment();
+    const dateM = moment(date);
+    return dateM.isBefore(dateNow);
+};

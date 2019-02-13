@@ -18,7 +18,8 @@ import {
     UPDATE_RENTAL_FAIL,
     RESET_RENTAL_ERRORS,
     RELOAD_MAP,
-    RELOAD_MAP_FINISH
+    RELOAD_MAP_FINISH,
+    UPDATE_BOOKINGS
 } from "./types";
 
 
@@ -91,10 +92,11 @@ export const fetchRentals = (city) => {
 export const fetchRentalById = (rentalId) => {
     return function(dispatch) {
         dispatch(fetchRentalByIdInit());
-        axios.get(`/api/v1/rentals/${rentalId}`).then((res) => {
+        return axios.get(`/api/v1/rentals/${rentalId}`).then((res) => {
             return res.data;
         }).then((rental) => {
             dispatch(fetchRentalByIdSuccess(rental));
+            return rental;
         });
     };
 };
@@ -161,6 +163,13 @@ export const fetchUserBookingsFail = (errors) => {
         type: FETCH_USER_BOOKINGS_FAIL,
         errors: errors
     };
+};
+
+export const updateBookings = (bookings) => {
+    return {
+        type: UPDATE_BOOKINGS,
+        bookings: bookings
+    }
 };
 
 export const fetchUserBookings = () => {
@@ -267,13 +276,33 @@ export const uploadImage = (image) => {
 
 
 export const getPendingPayments = () => {
-    return axiosInstance.get('/payments').then(res => res.data).catch(({response}) => Promise.reject(response.data.errors));
+    return axiosInstance.get('/payments')
+        .then(res => res.data)
+        .catch(({response}) => Promise.reject(response.data.errors));
 };
 
 export const acceptPayment = (payment) => {
-    return axiosInstance.post('/payments/accept', payment).then(res => res.data).catch(({response}) => Promise.reject(response.data.errors));
+    return axiosInstance.post('/payments/accept', payment)
+        .then(res => res.data)
+        .catch(({response}) => Promise.reject(response.data.errors));
 };
 
 export const declinePayment = (payment) => {
-    return axiosInstance.post('/payments/decline', payment).then(res => res.data).catch(({response}) => Promise.reject(response.data.errors));
+    return axiosInstance.post('/payments/decline', payment)
+        .then(res => res.data)
+        .catch(({response}) => Promise.reject(response.data.errors));
+};
+
+
+// REVIEW ACTIONS
+export const createReview = (reviewData, bookingId) => {
+    return axiosInstance.post(`reviews?bookingId=${bookingId}`, reviewData)
+        .then(res => res.data)
+        .catch(({response}) => Promise.reject(response.data.errors));
+};
+
+export const getReviews = (rentalId) => {
+    return axiosInstance.get(`reviews?rentalId=${rentalId}`)
+        .then(res => res.data)
+        .catch(({response}) => Promise.reject(response.data.errors));
 };
