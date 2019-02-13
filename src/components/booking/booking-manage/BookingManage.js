@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 import * as actions from '../../../actions';
 import {BookingCard, PaymentCard} from "./BookingCard";
 import {ReviewModal} from "../../review/ReviewModal";
+import {isExpired} from "../../../helpers";
 
 
 export class BookingManage extends React.Component {
@@ -37,9 +38,20 @@ export class BookingManage extends React.Component {
             .catch((err) => {});
     }
 
+    handleReviewCreated = (review, bookingIndex) => {
+        const {dispatch} = this.props;
+        const {data: bookings} = this.props.userBookings;
+        bookings[bookingIndex].review = review;
+        dispatch(actions.updateBookings(bookings));
+    };
+
     renderBookings(bookings) {
         return bookings.map((booking, index) => <BookingCard booking={booking}
-                                                             review={() => <ReviewModal/>}
+                                                             hasReview={!!booking.review}
+                                                             isExpired={isExpired(booking.endAt)}
+                                                             reviewModal={() => <ReviewModal onReviewCreated={(review) => {
+                                                                 this.handleReviewCreated(review, index)
+                                                             }} bookingId={booking._id}/>}
                                                              key={index}/>);
     }
 
